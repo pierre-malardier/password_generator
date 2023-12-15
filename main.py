@@ -5,7 +5,6 @@
 
 import random
 import json
-import pyperclip
 import string
 
 # function that create the password
@@ -48,6 +47,11 @@ def save_password(password):
     with open("password.json", "w") as file:
         json.dump(password, file, indent=4)
 
+def saved_password():
+    with open("password.json", "r") as file:
+        password = json.load(file)
+    return password
+
 # main function
 
 def main():
@@ -55,11 +59,27 @@ def main():
     website = input("Enter the website: ")
     if website in password:
         print(f"The password for {website} is {password[website]}")
-        pyperclip.copy(password[website])
     else:
         password[website] = create_password()
         save_password(password)
         print(f"The password for {website} is {password[website]}")
-        pyperclip.copy(password[website])
 
-main()
+
+def menu():
+    print("1. Créer un mot de passe")
+    print("2. Voir la liste des mots de passe")
+    print("5. Exit the programme")
+    choice = input("Enter your choice: ")
+    return choice
+
+choice = menu()
+while choice != "5":
+    if choice == "1":
+        main()
+    elif choice == "2":
+        password = saved_password()
+        print(password)
+    else:
+        print("Invalid choice")
+    choice = menu()
+print("Goodbye")
